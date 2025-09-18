@@ -1,6 +1,7 @@
 # main.py
 from fastapi import FastAPI, Query, HTTPException
 from fastapi.responses import FileResponse
+from fastapi.middleware.cors import CORSMiddleware
 from starlette.status import HTTP_400_BAD_REQUEST, HTTP_404_NOT_FOUND
 from pathlib import Path
 
@@ -10,6 +11,12 @@ app = FastAPI(title="Simple File Server")
 BASE_DIR = (Path(__file__).parent / "files").resolve()
 BASE_DIR.mkdir(exist_ok=True)  # на всякий случай создадим папку
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # или список доменов
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 def safe_path(filename: str) -> Path:
     """
